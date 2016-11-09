@@ -8,9 +8,8 @@ FROM anapsix/alpine-java:8_server-jre
 MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
 
 RUN set -x \
-  && echo "@testing http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-  && apk update \
-  && apk add git tar xmlstarlet@testing
+  && apk add git tar xmlstarlet --update-cache --allow-untrusted --repository http://dl-cdn.alpinelinux.org/alpine/edge/main --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
+  && rm -rf /var/cache/apk/*
 
 RUN set -x \
   && mkdir -p /opt/atlassian/jira \
