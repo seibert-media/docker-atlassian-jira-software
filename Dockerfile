@@ -18,4 +18,11 @@ RUN set -x \
 
 ADD files/entrypoint /usr/local/bin/entrypoint
 
+RUN set -x \
+  && chown -R daemon:daemon /usr/local/bin/entrypoint \
+  && chown -R daemon:daemon /opt/atlassian/jira \
+  && chown -R daemon:daemon /var/opt/atlassian/application-data/jira
+
+USER daemon
+
 ENTRYPOINT  ["/usr/local/bin/entrypoint"]
