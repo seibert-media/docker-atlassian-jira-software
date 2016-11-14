@@ -17,12 +17,27 @@ RUN set -x \
   && mkdir -p /opt/atlassian/jira \
   && mkdir -p /var/opt/atlassian/application-data/jira
 
+ADD https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-$VERSION.tar.gz /tmp
+
+RUN set -x \
+  && tar xvfz /tmp/atlassian-jira-software-$VERSION.tar.gz --strip-components=1 -C /opt/atlassian/jira \
+  && rm /tmp/atlassian-jira-software-$VERSION.tar.gz
+
+RUN set -x \
+  && sed --in-place 's/jira.home =/jira.home = \/var\/opt\/atlassian\/application-data\/jira/' /opt/atlassian/jira/atlassian-jira/WEB-INF/classes/jira-application.properties
+
+RUN set -x \
+  && touch -d "@0" "/opt/atlassian/jira/conf/server.xml" \
+  && touch -d "@0" "/opt/atlassian/jira/bin/setenv.sh"
+
 ADD files/entrypoint /usr/local/bin/entrypoint
 
 RUN set -x \
   && chown -R daemon:daemon /usr/local/bin/entrypoint \
   && chown -R daemon:daemon /opt/atlassian/jira \
   && chown -R daemon:daemon /var/opt/atlassian/application-data/jira
+
+EXPOSE 8080
 
 USER daemon
 

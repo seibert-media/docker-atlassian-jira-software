@@ -1,1 +1,32 @@
 #!/bin/bash
+
+if [ "$(stat -c "%Y" "/opt/atlassian/jira/conf/server.xml")" -eq "0" ]; then
+  if [ -n "${TOMCAT_PROXY_NAME}" ]; then
+    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "proxyName" --value "${TOMCAT_PROXY_NAME}" "/opt/atlassian/jira/conf/server.xml"
+  fi
+  if [ -n "${TOMCAT_PROXY_PORT}" ]; then
+    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "proxyPort" --value "${TOMCAT_PROXY_PORT}" "/opt/atlassian/jira/conf/server.xml"
+  fi
+  if [ -n "${TOMCAT_PROXY_SCHEME}" ]; then
+    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "scheme" --value "${TOMCAT_PROXY_SCHEME}" "/opt/atlassian/jira/conf/server.xml"
+  fi
+  if [ -n "${TOMCAT_PROXY_SECURE}" ]; then
+    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "secure" --value "${TOMCAT_PROXY_SECURE}" "/opt/atlassian/jira/conf/server.xml"
+  fi
+  if [ -n "${TOMCAT_CONTEXT_PATH}" ]; then
+    xmlstarlet ed --inplace --pf --ps --update '//Context/@path' --value "${TOMCAT_CONTEXT_PATH}" "/opt/atlassian/jira/conf/server.xml"
+  fi
+fi
+
+if [ "$(stat -c "%Y" "/opt/atlassian/jira/bin/setenv.sh")" -eq "0" ]; then
+  if [ -n "${JVM_MEMORY_MIN}" ]; then
+    sed --in-place "s/JVM_MINIMUM_MEMORY=\".*\"/JVM_MINIMUM_MEMORY=\"${JVM_MEMORY_MIN}\" /" /opt/atlassian/jira/bin/setenv.sh
+  fi
+  if [ -n "${JVM_MEMORY_MAX}" ]; then
+    sed --in-place "s/JVM_MAXIMUM_MEMORY=\".*\"/JVM_MAXIMUM_MEMORY=\"${JVM_MEMORY_MAX}\" /" /opt/atlassian/jira/bin/setenv.sh
+  fi
+fi
+
+nohup /opt/atlassian/jira/bin/start-jira.sh >/dev/null 2>&1 &
+
+/bin/bash
