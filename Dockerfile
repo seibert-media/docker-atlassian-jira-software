@@ -7,7 +7,8 @@ FROM anapsix/alpine-java:8_server-jre
 
 MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
 
-ENV VERSION 0.0.0
+ARG VERSION
+
 ENV JIRA_INST /opt/atlassian/jira
 ENV JIRA_HOME /var/opt/atlassian/application-data/jira
 
