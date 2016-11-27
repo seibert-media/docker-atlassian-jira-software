@@ -32,10 +32,6 @@ RUN set -x \
   && touch -d "@0" "$JIRA_INST/atlassian-jira/WEB-INF/classes/jira-application.properties"
 
 ADD files/entrypoint /usr/local/bin/entrypoint
-ADD files/_.codeyard.com.crt /tmp/_codeyard.com.crt
-
-RUN set -x \
-  && /opt/jdk/bin/keytool -import -trustcacerts -noprompt -keystore /opt/jdk/jre/lib/security/cacerts -storepass changeit -alias CODEYARD -file /tmp/_codeyard.com.crt
 
 RUN set -x \
   && chown -R daemon:daemon /usr/local/bin/entrypoint \
