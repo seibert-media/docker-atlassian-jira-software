@@ -42,4 +42,6 @@ EXPOSE 8080
 
 USER daemon
 
+VOLUME $JIRA_HOME
+
 ENTRYPOINT  ["/usr/local/bin/entrypoint"]
