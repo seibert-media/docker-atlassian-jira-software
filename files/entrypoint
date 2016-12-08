@@ -31,6 +31,4 @@ if [ "$(stat -c "%Y" "${JIRA_INST}/bin/setenv.sh")" -eq "0" ]; then
   fi
 fi
 
-nohup ${JIRA_INST}/bin/start-jira.sh >/dev/null 2>&1 &
-
-/bin/bash
+exec "$@"

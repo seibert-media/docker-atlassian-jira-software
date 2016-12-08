@@ -31,9 +31,11 @@ RUN set -x \
   && touch -d "@0" "$JIRA_INST/bin/setenv.sh" \
   && touch -d "@0" "$JIRA_INST/atlassian-jira/WEB-INF/classes/jira-application.properties"
 
+ADD files/service /usr/local/bin/service
 ADD files/entrypoint /usr/local/bin/entrypoint
 
 RUN set -x \
+  && chown -R daemon:daemon /usr/local/bin/service \
   && chown -R daemon:daemon /usr/local/bin/entrypoint \
   && chown -R daemon:daemon $JIRA_INST \
   && chown -R daemon:daemon $JIRA_HOME
@@ -45,3 +47,5 @@ USER daemon
 VOLUME $JIRA_HOME
 
 ENTRYPOINT  ["/usr/local/bin/entrypoint"]
+
+CMD ["/usr/local/bin/service"]
