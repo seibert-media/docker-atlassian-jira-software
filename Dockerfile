@@ -46,6 +46,6 @@ USER daemon
 
 VOLUME $JIRA_HOME
 
-ENTRYPOINT  ["/usr/local/bin/entrypoint"]
+ENTRYPOINT ["/usr/local/bin/entrypoint"]
 
 CMD ["/usr/local/bin/service"]
