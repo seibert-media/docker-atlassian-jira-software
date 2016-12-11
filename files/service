@@ -1,0 +1,3 @@
+#!/bin/bash
+
+${JIRA_INST}/bin/start-jira.sh -fg
