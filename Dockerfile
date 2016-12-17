@@ -8,6 +8,7 @@ FROM anapsix/alpine-java:8_server-jre
 MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
 
 ARG VERSION
+ARG MYSQL_JDBC_VERSION
 
 ENV JIRA_INST /opt/atlassian/jira
 ENV JIRA_HOME /var/opt/atlassian/application-data/jira
@@ -30,10 +31,15 @@ RUN set -x \
   && chown -R $SYSTEM_USER:$SYSTEM_GROUP /home/$SYSTEM_USER
 
 ADD https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-$VERSION.tar.gz /tmp
+ADD https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz /tmp
 
 RUN set -x \
   && tar xvfz /tmp/atlassian-jira-software-$VERSION.tar.gz --strip-components=1 -C $JIRA_INST \
   && rm /tmp/atlassian-jira-software-$VERSION.tar.gz
+
+RUN set -x \
+  && tar xvfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C  $JIRA_INST/atlassian-jira/WEB-INF/lib/ \
+  && rm /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz
 
 RUN set -x \
   && touch -d "@0" "$JIRA_INST/conf/server.xml" \
