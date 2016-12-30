@@ -35,7 +35,12 @@ ADD https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-$MYSQL_
 
 RUN set -x \
   && tar xvfz /tmp/atlassian-jira-software-$VERSION.tar.gz --strip-components=1 -C $JIRA_INST \
-  && rm /tmp/atlassian-jira-software-$VERSION.tar.gz
+  && rm /tmp/atlassian-jira-software-$VERSION.tar.gz \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/conf" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/logs" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/temp" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP "${JIRA_INST}/work" \
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $JIRA_HOME
 
 RUN set -x \
   && tar xvfz /tmp/mysql-connector-java-$MYSQL_JDBC_VERSION.tar.gz mysql-connector-java-$MYSQL_JDBC_VERSION/mysql-connector-java-$MYSQL_JDBC_VERSION-bin.jar -C $JIRA_INST/atlassian-jira/WEB-INF/lib/ \
@@ -51,9 +56,7 @@ ADD files/entrypoint /usr/local/bin/entrypoint
 
 RUN set -x \
   && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/service \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/entrypoint \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $JIRA_INST \
-  && chown -R $SYSTEM_USER:$SYSTEM_GROUP $JIRA_HOME
+  && chown -R $SYSTEM_USER:$SYSTEM_GROUP /usr/local/bin/entrypoint
 
 EXPOSE 8080
 
