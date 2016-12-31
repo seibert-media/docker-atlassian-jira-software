@@ -31,7 +31,7 @@ RUN set -x \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} /home/${SYSTEM_USER}
 
 RUN set -x \
-  && wget -O /tmp/atlassian-jira-software-${VERSION}.tar.gz https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${VERSION}.tar.gz \
+  && wget -nv -O /tmp/atlassian-jira-software-${VERSION}.tar.gz https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${VERSION}.tar.gz \
   && tar xfz /tmp/atlassian-jira-software-${VERSION}.tar.gz --strip-components=1 -C ${JIRA_INST} \
   && rm /tmp/atlassian-jira-software-${VERSION}.tar.gz \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} "${JIRA_INST}/conf" \
@@ -41,7 +41,7 @@ RUN set -x \
   && chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${JIRA_HOME}
 
 RUN set -x \
-  && wget -O /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz \
+  && wget -nv -O /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz \
   && tar xfz /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz mysql-connector-java-${MYSQL_JDBC_VERSION}/mysql-connector-java-${MYSQL_JDBC_VERSION}-bin.jar -C ${JIRA_INST}/atlassian-jira/WEB-INF/lib/ \
   && rm /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz
 
