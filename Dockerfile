@@ -39,7 +39,8 @@ RUN set -x \
 
 RUN set -x \
   && wget -nv -O /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz \
-  && tar xfz /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz mysql-connector-java-${MYSQL_JDBC_VERSION}/mysql-connector-java-${MYSQL_JDBC_VERSION}-bin.jar -C ${JIRA_INST}/atlassian-jira/WEB-INF/lib/ \
+  && tar xfz /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz /tmp \
+  && cp /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}/mysql-connector-java-${MYSQL_JDBC_VERSION}-bin.jar ${JIRA_INST}/atlassian-jira/WEB-INF/lib/ \
   && rm /tmp/mysql-connector-java-${MYSQL_JDBC_VERSION}.tar.gz
 
 RUN set -x \

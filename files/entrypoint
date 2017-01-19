@@ -6,19 +6,19 @@ fi
 
 if [ "$(stat -c "%Y" "${JIRA_INST}/conf/server.xml")" -eq "0" ]; then
   if [ -n "${TOMCAT_PROXY_NAME}" ]; then
-    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "proxyName" --value "${TOMCAT_PROXY_NAME}" "${JIRA_INST}/conf/server.xml"
+    xmlstarlet ed --inplace --insert '//Connector[@port="8080"]' --type "attr" --name "proxyName" --value "${TOMCAT_PROXY_NAME}" "${JIRA_INST}/conf/server.xml"
   fi
   if [ -n "${TOMCAT_PROXY_PORT}" ]; then
-    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "proxyPort" --value "${TOMCAT_PROXY_PORT}" "${JIRA_INST}/conf/server.xml"
+    xmlstarlet ed --inplace --insert '//Connector[@port="8080"]' --type "attr" --name "proxyPort" --value "${TOMCAT_PROXY_PORT}" "${JIRA_INST}/conf/server.xml"
   fi
   if [ -n "${TOMCAT_PROXY_SCHEME}" ]; then
-    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "scheme" --value "${TOMCAT_PROXY_SCHEME}" "${JIRA_INST}/conf/server.xml"
+    xmlstarlet ed --inplace --insert '//Connector[@port="8080"]' --type "attr" --name "scheme" --value "${TOMCAT_PROXY_SCHEME}" "${JIRA_INST}/conf/server.xml"
   fi
   if [ -n "${TOMCAT_PROXY_SECURE}" ]; then
-    xmlstarlet ed --inplace --pf --ps --insert '//Connector[@port="8080"]' --type "attr" --name "secure" --value "${TOMCAT_PROXY_SECURE}" "${JIRA_INST}/conf/server.xml"
+    xmlstarlet ed --inplace --insert '//Connector[@port="8080"]' --type "attr" --name "secure" --value "${TOMCAT_PROXY_SECURE}" "${JIRA_INST}/conf/server.xml"
   fi
   if [ -n "${TOMCAT_CONTEXT_PATH}" ]; then
-    xmlstarlet ed --inplace --pf --ps --update '//Context/@path' --value "${TOMCAT_CONTEXT_PATH}" "${JIRA_INST}/conf/server.xml"
+    xmlstarlet ed --inplace --update '//Context/@path' --value "${TOMCAT_CONTEXT_PATH}" "${JIRA_INST}/conf/server.xml"
   fi
 fi
 
