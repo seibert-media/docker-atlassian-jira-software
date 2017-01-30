@@ -11,12 +11,31 @@ This is a Docker-Image for Atlassian JIRA Software based on [Alpine Linux](http:
 
 ## Variables
 
-* TOMCAT_PROXY_NAME
-* TOMCAT_PROXY_PORT
-* TOMCAT_PROXY_SCHEME
-* TOMCAT_CONTEXT_PATH
+* TOMCAT_CONTEXT_PATH: default context path for jira is "/"
+
+Using with HTTP reverse proxy, not necessary with AJP:
+
+* TOMCAT_PROXY_NAME: domain of jira instance
+* TOMCAT_PROXY_PORT: e.g. 443
+* TOMCAT_PROXY_SCHEME: e.g. "https"
+
+JVM memory management:
+
 * JVM_MEMORY_MIN
 * JVM_MEMORY_MAX
+
+Crowd:
+
+* CROWD_SSO: if set to something, activate SSOSeraphAuthenticator as authenticator
+
+Modifies following parameters in crowd.properties:
+
+* CROWD_APP_NAME (modifies application.name)
+* CROWD_APP_PASSWORD (modifies application.password)
+* CROWD_APP_LOGIN_URL (modifies application.login.url)
+* CROWD_SERVER_URL (modifies crowd.server.url)
+* CROWD_BASE_URL (modifies crowd.base.url)
+* CROWD_VALIDATIONINTERVAL (modifies session.validationinterval)
 
 ## Ports
 * 8080
