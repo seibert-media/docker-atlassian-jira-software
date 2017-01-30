@@ -9,6 +9,8 @@ if [ "$(stat -c "%Y" "${JIRA_INST}/atlassian-jira/WEB-INF/classes/jira-applicati
 fi
 
 if [ "$(stat -c "%Y" "${JIRA_INST}/conf/server.xml")" -eq "0" ]; then
+  xmlstarlet ed --inplace -s '//Service[@name="Catalina"]' -t "elem" -n 'Connector port="8009" URIEncoding="UTF-8" enableLookups="false" protocol="AJP/1.3"' "${JIRA_INST}/conf/server.xml"
+
   if [ -n "${TOMCAT_PROXY_NAME}" ]; then
     xmlstarlet ed --inplace --insert '//Connector[@port="8080"]' --type "attr" --name "proxyName" --value "${TOMCAT_PROXY_NAME}" "${JIRA_INST}/conf/server.xml"
   fi
