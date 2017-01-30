@@ -8,7 +8,6 @@ FROM anapsix/alpine-java:8_server-jre
 MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
 
 ARG VERSION
-ARG MYSQL_JDBC_VERSION
 
 ENV JIRA_INST /opt/atlassian/jira
 ENV JIRA_HOME /var/opt/atlassian/application-data/jira
