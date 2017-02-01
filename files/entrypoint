@@ -1,10 +1,16 @@
 #!/bin/bash
 
+if [ "$(stat -c "%U" ${JIRA_HOME})" != "${SYSTEM_USER}" ]; then
+  chown -R ${SYSTEM_USER}:${SYSTEM_GROUP} ${JIRA_HOME}
+fi
+
 if [ "$(stat -c "%Y" "${JIRA_INST}/atlassian-jira/WEB-INF/classes/jira-application.properties")" -eq "0" ]; then
   sed --in-place "s~jira.home =~jira.home=$JIRA_HOME~" ${JIRA_INST}/atlassian-jira/WEB-INF/classes/jira-application.properties
 fi
 
 if [ "$(stat -c "%Y" "${JIRA_INST}/conf/server.xml")" -eq "0" ]; then
+  xmlstarlet ed --inplace -s '//Service[@name="Catalina"]' -t "elem" -n 'Connector port="8009" URIEncoding="UTF-8" enableLookups="false" protocol="AJP/1.3"' "${JIRA_INST}/conf/server.xml"
+
   if [ -n "${TOMCAT_PROXY_NAME}" ]; then
     xmlstarlet ed --inplace --insert '//Connector[@port="8080"]' --type "attr" --name "proxyName" --value "${TOMCAT_PROXY_NAME}" "${JIRA_INST}/conf/server.xml"
   fi
@@ -31,4 +37,24 @@ if [ "$(stat -c "%Y" "${JIRA_INST}/bin/setenv.sh")" -eq "0" ]; then
   fi
 fi
 
-exec "$@"
+if [ -n "${CROWD_SSO}" ]; then
+  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.jira.security.login.SSOSeraphAuthenticator" "${JIRA_INST}/atlassian-jira/WEB-INF/classes/seraph-config.xml"
+else
+  xmlstarlet ed --inplace -u '//authenticator/@class' -v "com.atlassian.jira.security.login.JiraSeraphAuthenticator" "${JIRA_INST}/atlassian-jira/WEB-INF/classes/seraph-config.xml"
+fi
+
+cat <<EOF > "${JIRA_INST}/atlassian-jira/WEB-INF/classes/crowd.properties"
+application.name                        ${CROWD_APP_NAME:-'username'}
+application.password                    ${CROWD_APP_PASSWORD:-'password'}
+application.login.url                   ${CROWD_APP_LOGIN_URL:-'http://localhost:8095/crowd/console/'}
+
+crowd.server.url                        ${CROWD_SERVER_URL:-'http://localhost:8095/crowd/services/'}
+crowd.base.url                          ${CROWD_BASE_URL:-'http://localhost:8095/crowd/'}
+
+session.isauthenticated                 session.isauthenticated
+session.tokenkey                        session.tokenkey
+session.validationinterval              ${CROWD_VALIDATIONINTERVAL:-'2'}
+session.lastvalidation                  session.lastvalidation
+EOF
+
+exec su-exec ${SYSTEM_USER} "$@"
