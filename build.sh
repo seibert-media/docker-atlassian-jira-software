@@ -15,7 +15,15 @@ if [ "$branch" = "HEAD" ]; then
 fi
 
 if [ "$branch" = "master" ]; then
-    VERSION=${atlassian_version} make build upload clean
+    version=${atlassian_version}
 else
-	VERSION=${atlassian_version}-${branch} ATLASSIAN_VERSION=${atlassian_version} make build upload clean
+    version=${atlassian_version}-${branch}
 fi
+
+registry="docker.seibert-media.net"
+REGISTRY="${registry}" IMAGE="seibertmedia/atlassian-jira-software" TAG="${version}" ./docker_image_missing.sh
+if [ $? -ne 0 ]; then
+  exit 0
+fi
+
+REGISTRY=${registry} VERSION=${version} ATLASSIAN_VERSION=${atlassian_version} make build upload clean
