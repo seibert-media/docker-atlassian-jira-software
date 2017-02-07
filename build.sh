@@ -1,11 +1,15 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e
+set -o nounset
+set -o pipefail
+set -o errtrace
+
+ATLASSIAN_VERSION=${ATLASSIAN_VERSION:-""}
 
 if [ -n "${ATLASSIAN_VERSION}" ]; then
     atlassian_version=${ATLASSIAN_VERSION}
 else
-    atlassian_version="$(curl -s https://my.atlassian.com/download/feeds/jira-software.rss | grep -Eo "(\d{1,2}\.){2,3}\d" | uniq)";
+    atlassian_version="$(curl -s https://my.atlassian.com/download/feeds/jira-software.rss | grep -Po "(\d{1,2}\.){2,3}\d" | uniq)"
 fi
 
 branch=$(git rev-parse --abbrev-ref HEAD)
