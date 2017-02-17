@@ -5,7 +5,7 @@
 
 FROM anapsix/alpine-java:8_server-jre
 
-MAINTAINER //SEIBERT/MEDIA GmbH <docker@seibert-media.net>
+MAINTAINER //SEIBERT/MEDIA GmbH <info@seibert-media.net>
 
 ARG VERSION
 
